@@ -1,0 +1,19 @@
+sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/mysite.dev
+
+sudo nano /etc/apache2/sites-available/mysite.dev.conf ->>>
+
+ServerName www.mysite.dev
+
+ServerAlias www.mysite.dev
+
+
+DocumentRoot /var/www/mysite.dev/public_html
+
+<<<-
+sudo nano /etc/apache2/sites-available/mysite.dev.conf
+sudo a2ensite mysite.dev.conf
+sudo service apache2restart
+sudo nano etc/hosts
+/*
+127.0.0.1   mysite.dev
+*/
