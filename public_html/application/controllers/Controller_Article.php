@@ -15,8 +15,14 @@ class Controller_Article extends Controller
         require 'application/models/Model_Article.php';
         $this->model = new Model_Article();
     }
-    public function action_index(){
-        $data = $this->model->getArticle();
+    public function action_index()
+    {
+        $data = $this->model->getData();
         $this->view->generate('articles',$data);
+    }
+    public function action_id($id)
+    {
+        $data = $this->model->getId($id);
+        $this->view->generate('single_article',$data);
     }
 }

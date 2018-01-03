@@ -10,16 +10,32 @@ class Route
 
 		$controllerName = 'Main';
 		$actionName = 'index';
+        $id;
 
 		if(!empty($segments[1])){
-			$controllerName = $segments[1];
+            $string= htmlspecialchars(strtolower($segments[1]));
+            $string = mb_convert_case($string, MB_CASE_TITLE, "UTF-8");
+			$controllerName = $string;
+
 			if(!empty($segments[2])){
-				$actionName = $segments[2];
+			    $string = htmlspecialchars(strtolower($segments[2]));
+				$actionName = $string;
+
+                if(!empty($segments[3])){
+                    $string = htmlspecialchars( (int) $segments[3] );
+                    $id = $string;
+                }
 			}
 		}
 
+		$modelFile = 'Model_'.$controllerName;
 		$controllerFile = 'Controller_'.$controllerName;
 		$actionName = 'action_'.$actionName;
+
+		$modelPath = 'application/models/' . $modelFile . 'php';
+		if (file_exists($modelPath)){
+		    include $modelPath;
+        }
 
 		$controllerPath = 'application/controllers/' . $controllerFile . '.php';
 		if(file_exists($controllerPath)){
@@ -27,12 +43,21 @@ class Route
 		}else{
 			Route::errorPage404();
 		}
+
 		$controller = new $controllerFile();
-		if(method_exists($controller,$actionName)){
-			$controller->$actionName();
-		}else{
-			Route::errorPage404();
-		}
+		 if (method_exists($controller, $actionName))
+         {
+             if (!empty ($id))
+             {
+                 $controller->$actionName($id);
+             }else
+             {
+                 $controller->$actionName();
+             }
+         }else
+         {
+             Route::errorPage404();
+         }
 	}
 
 	static function errorPage404(){
@@ -42,3 +67,5 @@ class Route
 }
 //explode превращает строку в массив
 // 1arg - разделитель,2 - строка
+/*Добавляем функционал, чтобы (любой)контроллер вызывался независимо от регистра букв.
+(mAin, main, MAIN во всех случаях должен быть вызван контроллер Main)*/

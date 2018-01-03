@@ -32,6 +32,8 @@ class Model
 //        }
 //    }
     public function getData(){
+    }
+    public function getId($id){
 
     }
 }

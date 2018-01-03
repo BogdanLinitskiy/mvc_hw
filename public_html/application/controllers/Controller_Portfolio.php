@@ -16,7 +16,11 @@ class Controller_Portfolio extends Controller
         $this->model = new Model_Portfolio();
     }
     public function action_index(){
-        $data = $this->model->getPortfolio();
-        $this->view->generate('portfolio',$data);
+        $data = $this->model->getData();
+        $this->view->generate('portfolios',$data);
+    }
+    public function action_id($id){
+        $data = $this->model->getId($id);
+        $this->view->generate('single_portfolio',$data);
     }
 }
